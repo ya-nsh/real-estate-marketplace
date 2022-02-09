@@ -3,6 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
 
+import { db } from '../firebase.config';
+
+import {
+  getAuth,
+  updateProfile,
+  createUserWithEmailAndPassword
+} from 'firebase/auth';
+
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -13,6 +21,31 @@ export default function SignUp() {
 
   const navigate = useNavigate();
   const { name, email, password } = formData;
+
+  const onSubmit = async e => {
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+
+      // Registering the user
+      const userCred = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCred.user;
+
+      // updating the display name
+      updateProfile(auth.currentUser, {
+        displayName: name
+      });
+
+      // redirecting to the homepage after submitting
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onChange = e => {
     setFormData(prevState => ({
@@ -28,7 +61,7 @@ export default function SignUp() {
           <p className="pageHeader">Welcome User!</p>
         </header>
 
-        <form>
+        <form onSubmit={onSubmit}>
           {' '}
           <input
             type="text"

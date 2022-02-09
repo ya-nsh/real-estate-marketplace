@@ -11,7 +11,6 @@ export default function Navbar() {
 
   const pathMatchRoute = route => {
     if (route === location.pathname) {
-      console.log(location);
       return true;
     }
   };

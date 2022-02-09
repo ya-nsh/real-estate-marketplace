@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +16,22 @@ export default function SignIn() {
 
   const navigate = useNavigate();
   const { email, password } = formData;
+
+  const onSubmit = async e => {
+    e.preventDefault();
+
+    try {
+      const auth = getAuth();
+
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+
+      if (userCred.user) {
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error('Incorrect User Credentials');
+    }
+  };
 
   const onChange = e => {
     setFormData(prevState => ({
@@ -27,7 +47,7 @@ export default function SignIn() {
           <p className="pageHeader">Welcome User!</p>
         </header>
 
-        <form>
+        <form onSubmit={onSubmit}>
           {' '}
           <input
             type="email"

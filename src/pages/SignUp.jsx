@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
@@ -53,7 +55,7 @@ export default function SignUp() {
       // redirecting to the homepage after submitting
       navigate('/');
     } catch (error) {
-      console.log(error);
+      toast.error('Something went wrong with the registration');
     }
   };
 

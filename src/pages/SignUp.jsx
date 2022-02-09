@@ -5,6 +5,8 @@ import visibilityIcon from '../assets/svg/visibilityIcon.svg';
 
 import { db } from '../firebase.config';
 
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+
 import {
   getAuth,
   updateProfile,
@@ -39,6 +41,14 @@ export default function SignUp() {
       updateProfile(auth.currentUser, {
         displayName: name
       });
+
+      // creating a copy for safety check
+      const formDataCopy = { ...formData };
+      // removing password so that it does not get submitted to the db
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db, 'users', user.uid), formDataCopy);
 
       // redirecting to the homepage after submitting
       navigate('/');

@@ -1,13 +1,11 @@
+import { db } from '../firebase.config';
 import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
+import { ToastContainer, toast } from 'react-toastify';
 import visibilityIcon from '../assets/svg/visibilityIcon.svg';
-
-import { db } from '../firebase.config';
-
 import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { ReactComponent as ArrowRightIcon } from '../assets/svg/keyboardArrowRightIcon.svg';
 
 import {
   getAuth,
@@ -48,6 +46,8 @@ export default function SignUp() {
       const formDataCopy = { ...formData };
       // removing password so that it does not get submitted to the db
       delete formDataCopy.password;
+
+      // adding a timestamp property to the formDataCopy
       formDataCopy.timestamp = serverTimestamp();
 
       await setDoc(doc(db, 'users', user.uid), formDataCopy);

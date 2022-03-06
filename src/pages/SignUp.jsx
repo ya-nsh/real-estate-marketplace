@@ -12,6 +12,7 @@ import {
   updateProfile,
   createUserWithEmailAndPassword
 } from 'firebase/auth';
+import OAuth from '../components/OAuth';
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -117,6 +118,7 @@ export default function SignUp() {
             </button>
           </div>
         </form>
+        <OAuth />
 
         <Link to="/sign-in" className="registerLink">
           Sign In Instead
